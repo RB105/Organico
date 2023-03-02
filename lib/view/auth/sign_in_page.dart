@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:organico/core/widgets/loading_widget.dart';
-import 'package:organico/provider/remote/sing_in_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../provider/remote/auth/sing_in_provider.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -16,13 +17,9 @@ class _SignInPageState extends State<SignInPage> {
     SignInProvider provider = Provider.of<SignInProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
           "Sign in",
-          style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.white,
-        elevation: 0.0,
       ),
       body: provider.isLoading
           ? const Center(child: LoadingWidget())

@@ -21,7 +21,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: SizedBox(child: SvgPicture.asset('assets/images/Logo.svg'))),
+      body: Center(child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(child: SvgPicture.asset('assets/images/Logo.svg')),
+          const SizedBox(height: 20,),
+          const Text("Organico",style: TextStyle(fontSize: 24),)
+        ],
+      )),
     );
   }
 

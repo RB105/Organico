@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:organico/core/widgets/loading_widget.dart';
-import 'package:organico/provider/remote/sign_up_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../provider/remote/auth/sign_up_provider.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
