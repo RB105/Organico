@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:organico/core/widgets/loading_widget.dart';
-import 'package:organico/view/pages/info_page.dart';
+import 'package:organico/provider/remote/stream/home_provider.dart';
+import 'package:provider/provider.dart';
 
 class CategoryPage extends StatelessWidget {
   final String categoryName;
@@ -37,6 +38,9 @@ class CategoryPage extends StatelessWidget {
                   child: Text("No products yet in this Category"),
                 );
               } else {
+                for (Map<String, dynamic> element in data) {
+                  Provider.of<HomeProvider>(context).searchList.add(element);
+                }
                 return GridView.builder(
                   itemCount: data.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -46,12 +50,8 @@ class CategoryPage extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    InfoPage(data: data[index]),
-                              ));
+                          Navigator.pushNamed(context, 'info',
+                              arguments: data[index]);
                         },
                         child: Container(
                           width: 176,

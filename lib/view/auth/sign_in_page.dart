@@ -75,7 +75,7 @@ class _SignInPageState extends State<SignInPage> {
                           await provider.signIn().then((response) {
                             if (response) {
                               Navigator.pushNamedAndRemoveUntil(
-                                  context, '/', (route) => false);
+                                  context, 'currentScreen', (route) => false);
                             }
                           });
                         },

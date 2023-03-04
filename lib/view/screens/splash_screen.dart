@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkUser(){
     FirebaseAuth.instance.authStateChanges().listen((User? user) { 
       if (user != null) {
-        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, 'currentScreen', (route) => false);
       } else {
         Navigator.pushNamedAndRemoveUntil(context, 'signUp', (route) => false);
       }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:organico/core/routes/router.dart';
 import 'package:organico/core/theme/dark_mode.dart';
 import 'package:organico/core/theme/light_mode.dart';
+import 'package:organico/provider/local/info_provider.dart';
+import 'package:organico/provider/local/theme_provider.dart';
 import 'package:organico/provider/remote/stream/home_provider.dart';
 import 'package:provider/provider.dart';
 import 'provider/remote/auth/sign_up_provider.dart';
@@ -22,7 +24,11 @@ void main(List<String> args) async {
       ),
       ChangeNotifierProvider(
         create: (context) => HomeProvider(),
-      )
+      ),
+      ChangeNotifierProvider(
+        create: (context) => InfoProvider(),
+      ),
+      ChangeNotifierProvider(create: (context) => ThemeProvider(),)
     ],
     child: const MyApp(),
   ));
@@ -33,12 +39,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        //  theme: theme,
-        //  darkTheme: darkTheme,
+    return AdaptiveTheme(
+      light: LightThemeMode.theme,
+      dark:  DarkThemeMode.theme,
+      initial: AdaptiveThemeMode.system,
+      builder: (theme, darkTheme) {
+        return MaterialApp(
+          theme: theme,
+          darkTheme: darkTheme,
           debugShowCheckedModeBanner: false,
           onGenerateRoute: RouteGenerator.router.onGenerate,
           initialRoute: 'splash',
         );
+      },
+    );
   }
 }

@@ -17,4 +17,6 @@ class HomeProvider extends ChangeNotifier {
       .collection('coupons')
       .orderBy('created_at')
       .snapshots();
+
+  List<Map<String, dynamic>> searchList = [];
 }
