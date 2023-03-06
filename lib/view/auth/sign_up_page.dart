@@ -116,7 +116,7 @@ the field below to sign in""",
                                 await provider.signUp().then((response) {
                                   if (response) {
                                     Navigator.pushNamedAndRemoveUntil(
-                                        context, '/', (route) => false);
+                                        context, 'currentScreen', (route) => false);
                                   } else if (response == false &&
                                       provider.isRegisteredBefore) {
                                     Navigator.pushNamed(context, 'signIn');

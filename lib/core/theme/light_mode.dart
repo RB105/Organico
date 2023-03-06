@@ -5,7 +5,7 @@ class LightThemeMode {
       scaffoldBackgroundColor: const Color(0xffFFFFFF),
       appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
-          titleTextStyle: TextStyle(color: Colors.black),
+          titleTextStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black)),
       elevatedButtonTheme: ElevatedButtonThemeData(

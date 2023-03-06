@@ -7,7 +7,7 @@ class DarkThemeMode {
         elevation: 0.0,
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: Colors.white),
-          titleTextStyle: TextStyle(color: Colors.white)),
+          titleTextStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18)),
       listTileTheme: const ListTileThemeData(
         
         iconColor: Colors.white,

@@ -44,6 +44,7 @@ class InfoPage extends StatelessWidget {
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
+                         Text(data['market'].toString()),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -52,16 +53,20 @@ class InfoPage extends StatelessWidget {
                               child: Row(
                                 children: [
                                   IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        infoProvider.decrement();
+                                      },
                                       icon: const Icon(Icons.remove)),
-                                  const Text(
-                                    "1",
-                                    style: TextStyle(
+                                  Text(
+                                    infoProvider.counter.toString(),
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        infoProvider.increment();
+                                      },
                                       icon: const Icon(Icons.add)),
                                 ],
                               ),
@@ -69,7 +74,7 @@ class InfoPage extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          "${data['cost'].toString()}/kg",
+                          "USD ${(double.parse(data['cost'].toString()) * infoProvider.counter)}/kg",
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         )

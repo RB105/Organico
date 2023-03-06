@@ -20,11 +20,12 @@ class _HomePageState extends State<HomePage> {
     HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     String location = 'Uz,Tashkent';
     Size size = MediaQuery.of(context).size;
-    List<Map<String,dynamic>> coupons = [];
+    List<Map<String, dynamic>> coupons = [];
     return ChangeNotifierProvider(
       create: (context) => HomeProvider(),
       builder: (context, child) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -51,8 +52,9 @@ class _HomePageState extends State<HomePage> {
                           ],
                           onChanged: (v) {})),
                   TextFormField(
-                    onTap: (){
-                     showSearch(context: context, delegate: MySearchDelegate());
+                    onTap: () {
+                      showSearch(
+                          context: context, delegate: MySearchDelegate());
                     },
                     readOnly: true,
                     decoration: InputDecoration(
@@ -111,182 +113,178 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  StreamBuilder<QuerySnapshot<Object?>> _bestSellingStream(HomeProvider homeProvider) {
+  StreamBuilder<QuerySnapshot<Object?>> _bestSellingStream(
+      HomeProvider homeProvider) {
     return StreamBuilder(
-                      stream: homeProvider.bestSellingProducts,
-                      builder: (context,
-                          AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: Text(""),
-                          );
-                        } else {
-                          List<Map<String, dynamic>> data = [];
-                          snapshot.data!.docs.map((docment) {
-                            data.add(docment.data() as Map<String, dynamic>);
-                          }).toList();
-                          return ListView.separated(
-                              padding: const EdgeInsets.all(8),
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  width: 196,
-                                  decoration: BoxDecoration(
-                                      color: const Color.fromARGB(
-                                          255, 247, 145, 145),
-                                      borderRadius:
-                                          BorderRadius.circular(20)),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      SizedBox(
-                                          width: 90,
-                                          height: 90,
-                                          child: Image.network(
-                                              data[index]['img'])),
-                                      Text(data[index]['name'].toString()),
-                                      Text(data[index]['created_at'])
-                                    ],
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(
-                                  width: 10,
-                                );
-                              },
-                              itemCount: data.length);
-                        }
-                      },
-                    );
-  }
-
-  StreamBuilder<QuerySnapshot<Object?>> _categoryStream(HomeProvider homeProvider) {
-    return StreamBuilder(
-                      stream: homeProvider.products,
-                      builder: (context,
-                          AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
-                        if (snapshot.hasError) {
-                          return const Center(
-                            child: Text("Server Error"),
-                          );
-                        } else if (!snapshot.hasData) {
-                          return const Center(
-                            child: LoadingWidget(),
-                          );
-                        } else {
-                          List<Map<String, dynamic>> data = [];
-                          snapshot.data!.docs.map((docment) {
-                            data.add(docment.data() as Map<String, dynamic>);
-                          }).toList();
-                          if (data.isEmpty) {
-                            return const Center(
-                              child: Text("No products yet"),
-                            );
-                          } else {
-                            return ListView.separated(
-                                padding: const EdgeInsets.all(8),
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    child: Container(
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffFE706E),
-                                        borderRadius:
-                                            BorderRadius.circular(20),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          SizedBox(
-                                              width: 84,
-                                              height: 60,
-                                              child: Image.network(
-                                                  data[index]['img'])),
-                                          Text(
-                                              data[index]['name'].toString()),
-                                        ],
-                                      ),
-                                    ),
-                                    onTap: () async {
-                                      Stream<QuerySnapshot> category =
-                                          FirebaseFirestore.instance
-                                              .collection(
-                                                  'products/${data[index]['name'].toString()}/${data[index]['name'].toString()}')
-                                              .orderBy('created_at')
-                                              .snapshots();
-
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                CategoryPage(
-                                              streamData: category,
-                                              categoryName: data[index]
-                                                      ['name']
-                                                  .toString(),
-                                            ),
-                                          ));
-                                    },
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return const SizedBox(
-                                    width: 10,
-                                  );
-                                },
-                                itemCount: data.length);
-                          }
-                        }
-                      },
-                    );
-  }
-
-  ListTile _couponStream(HomeProvider homeProvider, List<Map<String, dynamic>> coupons, BuildContext context) {
-    return ListTile(
-                  leading: Container(
-                    height: 50,
-                    width: 50,
+      stream: homeProvider.bestSellingProducts,
+      builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: Text(""),
+          );
+        } else {
+          List<Map<String, dynamic>> data = [];
+          snapshot.data!.docs.map((docment) {
+            data.add(docment.data() as Map<String, dynamic>);
+          }).toList();
+          return ListView.separated(
+              padding: const EdgeInsets.all(8),
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'info',
+                        arguments: data[index]);
+                  },
+                  child: Container(
+                    width: 196,
                     decoration: BoxDecoration(
-                        color: const Color(0xffE9F0F7),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(
-                      child: SvgPicture.asset('assets/images/IcCoupon.svg'),
+                        color: const Color.fromARGB(255, 247, 145, 145),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                            width: 90,
+                            height: 90,
+                            child: Image.network(data[index]['img'])),
+                        Text(data[index]['name'].toString(),style: const TextStyle(fontSize: 16),),
+                        Text(data[index]['market'].toString(),style: const TextStyle(fontWeight: FontWeight.bold),),
+                      ],
                     ),
                   ),
-                  title: StreamBuilder(
-                    stream: homeProvider.coupons,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Text("");
-                      } else if (snapshot.hasError) {
-                        return const Center(
-                          child: Text("Server error"),
-                        );
-                      } else {
-                        List<Map<String, dynamic>> data = [];
-                        snapshot.data!.docs.map((docment) {
-                          data.add(docment.data() as Map<String, dynamic>);
-                        }).toList();
-                        if (data.isEmpty) {
-                          return const Text("No coupons yet");
-                        } else {
-                          coupons = data;
-                          return Text("You have ${data.length} coupon");
-                        }
-                      }
-                    },
-                  ),
-                  subtitle: const Text("Let's use this coupon"),
-                  trailing: const Icon(Icons.arrow_forward_ios_rounded),
-                  onTap: (){
-                    if (coupons.isNotEmpty) {
-                      Navigator.pushNamed(context, 'coupon',arguments: coupons);
-                    }
-                  },
                 );
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  width: 10,
+                );
+              },
+              itemCount: data.length);
+        }
+      },
+    );
+  }
+
+  StreamBuilder<QuerySnapshot<Object?>> _categoryStream(
+      HomeProvider homeProvider) {
+    return StreamBuilder(
+      stream: homeProvider.products,
+      builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text("Server Error"),
+          );
+        } else if (!snapshot.hasData) {
+          return const Center(
+            child: LoadingWidget(),
+          );
+        } else {
+          List<Map<String, dynamic>> data = [];
+          snapshot.data!.docs.map((docment) {
+            data.add(docment.data() as Map<String, dynamic>);
+          }).toList();
+          if (data.isEmpty) {
+            return const Center(
+              child: Text("No products yet"),
+            );
+          } else {
+            return ListView.separated(
+                padding: const EdgeInsets.all(8),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    child: Container(
+                      width: 120,
+                      decoration: BoxDecoration(
+                        color: const Color(0xffFE706E),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                              width: 84,
+                              height: 60,
+                              child: Image.network(data[index]['img'])),
+                          Text(data[index]['name'].toString()),
+                        ],
+                      ),
+                    ),
+                    onTap: () async {
+                      Stream<QuerySnapshot> category = FirebaseFirestore
+                          .instance
+                          .collection(
+                              'products/${data[index]['name'].toString()}/${data[index]['name'].toString()}')
+                          .orderBy('created_at')
+                          .snapshots();
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CategoryPage(
+                              streamData: category,
+                              categoryName: data[index]['name'].toString(),
+                            ),
+                          ));
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(
+                    width: 10,
+                  );
+                },
+                itemCount: data.length);
+          }
+        }
+      },
+    );
+  }
+
+  ListTile _couponStream(HomeProvider homeProvider,
+      List<Map<String, dynamic>> coupons, BuildContext context) {
+    return ListTile(
+      leading: Container(
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+            color: const Color(0xffE9F0F7),
+            borderRadius: BorderRadius.circular(10)),
+        child: Center(
+          child: SvgPicture.asset('assets/images/IcCoupon.svg'),
+        ),
+      ),
+      title: StreamBuilder(
+        stream: homeProvider.coupons,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Text("");
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text("Server error"),
+            );
+          } else {
+            List<Map<String, dynamic>> data = [];
+            snapshot.data!.docs.map((docment) {
+              data.add(docment.data() as Map<String, dynamic>);
+            }).toList();
+            if (data.isEmpty) {
+              return const Text("No coupons yet");
+            } else {
+              coupons = data;
+              return Text("You have ${data.length} coupon");
+            }
+          }
+        },
+      ),
+      subtitle: const Text("Let's use this coupon"),
+      trailing: const Icon(Icons.arrow_forward_ios_rounded),
+      onTap: () {
+        if (coupons.isNotEmpty) {
+          Navigator.pushNamed(context, 'coupon', arguments: coupons);
+        }
+      },
+    );
   }
 }

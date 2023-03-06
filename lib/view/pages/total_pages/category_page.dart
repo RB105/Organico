@@ -71,7 +71,8 @@ class CategoryPage extends StatelessWidget {
                                         image: NetworkImage(
                                             data[index]['img'].toString()))),
                               ),
-                              Text(data[index]['name'].toString()),
+                              Text(data[index]['name'].toString(),style: const TextStyle(fontSize: 20),),
+                              Text(data[index]['market'].toString()),
                               ListTile(
                                 title: Text(
                                     "${data[index]['cost'].toString()} USD"),
